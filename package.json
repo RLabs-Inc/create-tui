@@ -1,0 +1,45 @@
+{
+  "name": "@rlabs-inc/create-tui",
+  "version": "0.2.0",
+  "description": "Create TUI Framework applications with a single command",
+  "type": "module",
+  "bin": {
+    "create-tui": "./dist/index.js"
+  },
+  "files": [
+    "dist",
+    "templates"
+  ],
+  "scripts": {
+    "dev": "bun run src/index.ts",
+    "build": "bun build src/index.ts --outfile dist/index.js --target bun",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "bun run build"
+  },
+  "dependencies": {
+    "@rlabs-inc/tui": "latest",
+    "@rlabs-inc/signals": "latest"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "typescript": "^5.0.0"
+  },
+  "keywords": [
+    "tui",
+    "terminal",
+    "ui",
+    "cli",
+    "create",
+    "scaffold",
+    "bun",
+    "typescript",
+    "reactive"
+  ],
+  "author": "RLabs Inc",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rlabs-inc/create-tui"
+  },
+  "homepage": "https://github.com/rlabs-inc/tui"
+}
