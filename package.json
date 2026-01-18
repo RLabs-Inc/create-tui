@@ -1,6 +1,6 @@
 {
   "name": "@rlabs-inc/create-tui",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Create TUI Framework applications with a single command",
   "type": "module",
   "bin": {

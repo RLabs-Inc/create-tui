@@ -9,23 +9,31 @@
  */
 
 import { derived } from '@rlabs-inc/signals'
-import { box, text, t, BorderStyle, Attr, getVariantStyle } from '@rlabs-inc/tui'
+import { box, text, t, BorderStyle, Attr, getVariantStyle, reactiveProps } from '@rlabs-inc/tui'
 import type { Counter as CounterState } from '../state/counters'
+import type { PropInput } from '@rlabs-inc/tui'
 
 interface CounterProps {
   counter: CounterState
-  focused: boolean
+  focused: PropInput<boolean>
 }
 
-export function Counter({ counter, focused }: CounterProps) {
+export function Counter(rawProps: CounterProps) {
+  // Complex objects with nested signals: use directly (don't wrap)
+  const { counter } = rawProps
+
+  // Simple PropInput props: wrap with reactiveProps for consistent .value access
+  const { focused } = reactiveProps({ focused: rawProps.focused })
+
   // Get variant colors
   const variantStyle = getVariantStyle(counter.variant)
 
   box({
-    border: focused ? BorderStyle.DOUBLE : BorderStyle.SINGLE,
-    borderColor: focused ? t.primary : t.border,
+    // Use getters for reactive border/bg based on focus state
+    border: () => focused.value ? BorderStyle.DOUBLE : BorderStyle.SINGLE,
+    borderColor: () => focused.value ? t.primary.value : t.border.value,
     padding: 1,
-    bg: focused ? t.surface : undefined,
+    bg: () => focused.value ? t.surface.value : null,
     children: () => {
       // Counter name with variant indicator
       box({
@@ -34,8 +42,8 @@ export function Counter({ counter, focused }: CounterProps) {
         children: () => {
           text({
             content: counter.name,
-            fg: focused ? t.primary : t.text,
-            attrs: focused ? Attr.BOLD : 0,
+            fg: () => focused.value ? t.primary.value : t.text.value,
+            attrs: () => focused.value ? Attr.BOLD : 0,
           })
           box({
             width: 2,
@@ -68,7 +76,7 @@ export function Counter({ counter, focused }: CounterProps) {
         alignItems: 'center',
         children: () => {
           text({
-            content: focused ? '[+/-] to change' : '',
+            content: () => focused.value ? '[+/-] to change' : '',
             fg: t.textDim,
           })
         },

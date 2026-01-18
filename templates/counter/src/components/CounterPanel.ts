@@ -7,7 +7,6 @@
  * - Focus tracking per item
  */
 
-import { derived } from '@rlabs-inc/signals'
 import { box, text, each, t, BorderStyle, Attr, focusManager } from '@rlabs-inc/tui'
 import { counters } from '../state/counters'
 import { Counter } from './Counter'
@@ -50,9 +49,6 @@ export function CounterPanel() {
               const counter = getCounter()
               // Find index for focus tracking
               const counterIndex = counters.value.findIndex(c => String(c.id) === key)
-              const isFocused = derived(
-                () => focusManager.focusedIndex === counterIndex
-              )
 
               return box({
                 width: '48%',
@@ -60,7 +56,8 @@ export function CounterPanel() {
                 children: () => {
                   Counter({
                     counter,
-                    focused: isFocused.value,
+                    // Pass as getter - Counter uses reactiveProps to normalize
+                    focused: () => focusManager.focusedIndex === counterIndex,
                   })
                 },
               })
